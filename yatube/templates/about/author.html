@@ -1,0 +1,48 @@
+<!-- templates/about/author.html -->
+{% extends "base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% load static %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Привет, я автор проекта Yatube</h1>
+    </div>
+  </div>
+</div>
+<p></p>
+<div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">     
+        <p>
+          Меня зовут Михаил. С детства мне нравятся информационные технологии.<br/>
+          Но так вышло, что десять лет я проработал в совершенно другой сфере.<br/>
+          Полноценно учиться получилось только сейчас благодаря Яндекс Практикуму.<br/>
+          На смену профессии меня вдохновляют возможности реализации себя,<br/>
+          которые дает сфера информационных технологий и поддержка близких.     
+        </p>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <img src="{% static 'img/workplace.jpeg' %}" width="630" height="430" class="d-inline-block align-top" alt="">
+      </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2>Мои контакты</h2>
+    </div>
+  </div>
+</div>
+<p></p>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <p>Телефон: +7 (123) 456-78-90</p>
+      <p>Почта: <a href="mailto: muxa_f@mail.ru">muxa_f@mail.ru</a></p>
+      <p>Github: <a href="https://github.com/Mikhail2690">github.com/Mikhail2690</a></p>
+      <p>Вконтакте: <a href="https://vk.com/m.fedorenko1990">vk.com/m.fedorenko1990</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

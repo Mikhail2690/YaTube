@@ -1,0 +1,43 @@
+<!-- templates/about/tech.html -->
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% load static %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Вот что я умею</h1>
+    </div>
+  </div>
+</div>
+<p></p>
+  <div class="container">
+    <div class="row">
+      <aside class="col-12 col-md-3">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Python
+          </li>
+          <li class="list-group-item">
+            Django
+          </li>
+        </ul>
+      </aside>
+      <article class="col-12 col-md-9">
+        <p></p>
+        <p>Циклы и ветвления, функции, словари и множества,
+           строки и форматирование, библиотеки, протокол HTTP.</p>
+           <p></p>
+           <p>Django ORM, управление пользователями, декораторы,
+              области видимости, контекст-процессоры, paginator.</p>  
+      </article>
+    </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+      <img src="{% static 'img/mem.png' %}" width="430" height="430" class="d-inline-block align-top" alt="">
+    </div>
+  </div>
+</div>
+{% endblock %}

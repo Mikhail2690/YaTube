@@ -150,3 +150,7 @@ static/
 yatube/posts/static/
 yatube/media/
 
+media/
+.MEDIA/
+.media.*
+media.*
