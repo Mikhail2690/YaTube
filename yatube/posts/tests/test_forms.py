@@ -157,12 +157,14 @@ class CommentFormTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user = User.objects.create_user(username='author')
-        cls.authorized_client = Client()
-        cls.authorized_client.force_login(cls.user)
         cls.post = Post.objects.create(
             author=cls.user,
             text='Тестовый пост',
         )
+
+    def setUp(self):
+        self.authorized_client = Client()
+        self.authorized_client.force_login(self.user)
 
     def test_form_create_comment(self):
         """Валидная форма создает запись в Comment."""

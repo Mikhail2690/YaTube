@@ -15,16 +15,12 @@ def paginate(queryset, request):
     return page_obj
 
 
-@cache_page(20)
+@cache_page(20, key_prefix="site1")
 def index(request):
     template = 'posts/index.html'
-    title = 'Последние обновления на сайте'
-    text = 'Последние обновления на сайте'
     posts = Post.objects.select_related('author', 'group')
     page_obj = paginate(posts, request)
     context = {
-        'title': title,
-        'text': text,
         'page_obj': page_obj,
     }
     return render(request, template, context)
@@ -33,12 +29,10 @@ def index(request):
 def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
-    title = f'Записи сообщества {group}'
     posts = group.posts.select_related('author', 'group')
     page_obj = paginate(posts, request)
     context = {
         'group': group,
-        'title': title,
         'page_obj': page_obj,
     }
     return render(request, template, context)
@@ -47,7 +41,8 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.select_related('author', 'group')
-    following = request.user.is_authenticated and author.following.exists()
+    following = request.user.is_authenticated and Follow.objects.filter(
+        user=request.user, author=author).exists()
     page_obj = paginate(posts, request)
     context = {
         'page_obj': page_obj,
@@ -60,7 +55,7 @@ def profile(request, username):
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST or None)
-    comments = post.comments.all()
+    comments = post.comments.select_related('author')
     context = {
         'post': post,
         'comments': comments,
@@ -138,5 +133,7 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
-    Follow.objects.get(user=request.user, author__username=username).delete()
+    Follow.objects.filter(user=request.user,
+                          author=get_object_or_404(User, username=username)
+                          ).delete()
     return redirect('posts:profile', username)

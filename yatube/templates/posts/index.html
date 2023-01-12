@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block content %} 
-<!-- класс py-5 создает отступы сверху и снизу блока -->
 <div class="container py-5">     
-  <h1>{{ text }}</h1>
+  <h1>Последние обновления на сайте</h1>
   <article>
-    {% include 'includes/switcher.html' %}
+    {% include 'includes/switcher.html' with index=True %}
     {% for post in page_obj %}
     {% include 'includes/one_post.html' %}
     {% if post.group %}   

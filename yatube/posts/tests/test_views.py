@@ -189,28 +189,39 @@ class PostViewsTests(TestCase):
             reverse('posts:index')
         )
         self.assertEqual(response.content, new_response.content)
+        self.assertNotEqual(response.context, new_response.context)
 
-    def test_authorized_user_can_subscribe_and_remove(self):
-        """Авторизованный пользователь может
-        удалять других пользователей из подписок."""
-        self.authorized_client.get(reverse(
-            'posts:profile_follow',
-            kwargs={'username': self.post_author.username}
-        ))
-        self.authorized_client.get(reverse(
-            'posts:profile_unfollow',
-            kwargs={'username': self.post_author.username}
-        ))
-        self.assertFalse(Follow.objects.filter(
-            user=self.user, author=self.post_author
-        ).exists())
+    def test_authorised_user_can_subscribe(self):
+        """
+        Авторизованный пользователь может подписываться на других
+        пользователей.
+        """
+        self.authorized_client.get(
+            reverse('posts:profile_follow',
+                    kwargs={'username': self.post_author.username})
+        )
+        self.assertEqual(Follow.objects.count(), 1)
+
+    def test_authorised_user_can_unsubscribe(self):
+        """
+        Авторизованный пользователь может удалять пользователей из подписок.
+        """
+        self.authorized_client.get(
+            reverse('posts:profile_follow',
+                    kwargs={'username': self.post_author.username})
+        )
+        self.authorized_client.get(
+            reverse('posts:profile_unfollow',
+                    kwargs={'username': self.post_author.username})
+        )
+        self.assertEqual(Follow.objects.count(), 0)
 
     def test_new_post_in_correct_follow(self):
         """Новая запись автора появляется в ленте подписчиков."""
-        self.authorized_client.get(reverse(
-            'posts:profile_follow',
-            kwargs={'username': self.post_author.username}
-        ))
+        Follow.objects.create(
+            user=self.user,
+            author=self.post_author,
+        )
         new_post = Post.objects.create(
             author=self.post_author,
             text='Тестовый пост',
@@ -228,10 +239,7 @@ class PostViewsTests(TestCase):
             text='Тестовый пост',
             group=self.group,
         )
-        another_user = User.objects.create_user(username='another_user')
-        another_authorized_client = Client()
-        another_authorized_client.force_login(another_user)
-        response = another_authorized_client.get(
+        response = self.authorized_client.get(
             reverse('posts:follow_index')
         )
         self.assertNotIn(new_post, response.context['page_obj'])
