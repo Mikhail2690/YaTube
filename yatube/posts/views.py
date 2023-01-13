@@ -15,7 +15,7 @@ def paginate(queryset, request):
     return page_obj
 
 
-@cache_page(20, key_prefix="site1")
+@cache_page(20, key_prefix='index_page')
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.select_related('author', 'group')

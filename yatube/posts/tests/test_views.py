@@ -189,7 +189,11 @@ class PostViewsTests(TestCase):
             reverse('posts:index')
         )
         self.assertEqual(response.content, new_response.content)
-        self.assertNotEqual(response.context, new_response.context)
+        cache.clear()
+        third_response = self.authorized_client.get(
+            reverse('posts:index')
+        )
+        self.assertNotEqual(response.content, third_response.content)
 
     def test_authorised_user_can_subscribe(self):
         """
@@ -206,9 +210,9 @@ class PostViewsTests(TestCase):
         """
         Авторизованный пользователь может удалять пользователей из подписок.
         """
-        self.authorized_client.get(
-            reverse('posts:profile_follow',
-                    kwargs={'username': self.post_author.username})
+        Follow.objects.create(
+            user=self.user,
+            author=self.post_author,
         )
         self.authorized_client.get(
             reverse('posts:profile_unfollow',
